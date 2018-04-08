@@ -25,6 +25,8 @@ signal sw_a, sw_b 	: signed(N-1 downto 0);
 signal clk, rst, oflow   : std_logic;
 signal A, B 	  	: signed(N-1 downto 0); 
 signal sig, SUM     	: signed(N-1 downto 0);
+--segnali per i segmenti
+signal segmenti1, segmenti2, segmenti3, segmenti4, segmenti5, segmenti6  : std_vector_logic(6 downto 0);
 
 component reg_n 
 port (			R 	      		: in signed(N-1 downto 0);
@@ -41,6 +43,15 @@ component flipflop
 port (	                D, Clock, Resetn 	: in std_logic;
 			Q 		        : out std_logic );
 end component;
+
+component decoder_bin_exa
+port 
+		(
+			Clock : IN std_logic;
+			Q   : IN std_logic_vector (3 downto 0);
+			Segmenti : OUT std_logic_vector (6 downto 0)
+		);
+	end component;
 
 begin
 --sw_a <= SW(7 downto 0);   -- NON SERVONO ORA
@@ -78,5 +89,23 @@ RegB : reg_n port map (Y, clk, rst, B);
 RegU : reg_n port map (SUM, clk, rst, S);
 Ovfl : flipflop port map (oflow, clk, rst, Overflow);
 
-end structure; 
 
+--uso il primo decoder per settare i segmenti da agganciare a HEX0
+Dec_Primo_sum_display: decoder_bin_exa port map (clock=>clk, Q => S(3 downto 0), Segmenti => segmenti1);
+
+--uso il secondo decoder per settare i segmenti da agganciare a HEX1
+Dec_secondo_sum_display: decoder_bin_exa port map (clock=>clk, Q => S(7 downto 4), Segmenti => segmenti2);
+
+--uso il terzo decoder per settare i segmenti da agganciare a HEX6
+Dec_primo_x_display: decoder_bin_exa port map (clock=>clk, Q => x(3 downto 3), Segmenti => segmenti3);
+
+--uso il quarto decoder per settare i segmenti da agganciare a HEX7
+Dec_secondo_x_display: decoder_bin_exa port map (clock=>clk, Q => x(7 downto 4), Segmenti => segmenti4);
+
+--uso il quinto decoder per settare i segmenti da agganciare a HEX4
+Dec_primo_y_display: decoder_bin_exa port map (clock=>clk, Q => y(3 downto 0), Segmenti => segmenti5);
+
+--uso il sesto decoder per settare i segmenti da agganciare a HEX5
+Dec_secondo_y_display: decoder_bin_exa port map (clock=>clk, Q => y(7 downto 4), Segmenti => segmenti6);
+
+end structure; 
