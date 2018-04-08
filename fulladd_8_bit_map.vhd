@@ -63,7 +63,7 @@ c(0) <= '0';  --il primo carry inizializzato a 0
 --stage8 : fulladd port map (Cin => c(7), Cout => Cout, a => A(7), b => B(7), s => S(7));
 
 FA0: FOR i IN 0 to N-1 generate --ciclo generate
-      stage_i: fulladd PORT MAP (Cin=>c(i), a=>A(i), b=>B(i), sum=>SUM(i), Cout=>c(i+1));
+      adders: fulladd PORT MAP (Cin=>c(i), a=>A(i), b=>B(i), sum=>SUM(i), Cout=>c(i+1));
    end generate;
 -- fine blocco full add
 
