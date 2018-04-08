@@ -1,12 +1,13 @@
 
 library ieee;
 use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
 
 entity decoder_bin_exa IS
 	port 
 		(
 			Clock : IN std_logic;
-			Q   : IN std_logic_vector (3 downto 0);
+			Q   : IN signed(3 downto 0);
 			Segmenti : OUT std_logic_vector (6 downto 0)
 		);
 	end decoder_bin_exa;
@@ -14,7 +15,7 @@ entity decoder_bin_exa IS
 architecture behavior OF decoder_bin_exa IS
 	
 	begin		
-		set_display: process(clock)
+		set_display: process(Q)
 			Begin
 			
 				num_0:	if ( not(Q(0)) and not(Q(1)) and not(Q(2)) and not(Q(3)) ) = '1' then
@@ -47,7 +48,7 @@ architecture behavior OF decoder_bin_exa IS
 					
 				--num_7:	
 							elsif ( Q(0) and Q(1) and Q(2) and not(Q(3)) ) = '1' then
-							Segmenti <= "11110000";
+							Segmenti <= "1111000";
 					
 				--num_8:	
 							elsif ( not(Q(0)) and not(Q(1)) and not(Q(2)) and Q(3) ) = '1' then
@@ -83,4 +84,4 @@ architecture behavior OF decoder_bin_exa IS
 				end if ;
 			end process set_display;
 		
-	end behavior;
+end behavior;
