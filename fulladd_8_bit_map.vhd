@@ -18,11 +18,11 @@ port (      --Cin : in std_logic;
 	end adder8;
 
 architecture structure of adder8 is
+-- segnale per i carry
 signal c 	  	: std_logic_vector(N downto 0);
 -- segnali per i flip flops	
 signal sw_a, sw_b 	: signed(N-1 downto 0);
 signal clk, rst, oflow   : std_logic;
---signal Cout   : std_logic;
 signal A, B 	  	: signed(N-1 downto 0); 
 signal sig, SUM     	: signed(N-1 downto 0);
 
