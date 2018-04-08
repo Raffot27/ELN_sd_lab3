@@ -4,16 +4,12 @@ use ieee.numeric_std.all;
 
 entity adder8 is 
 generic ( N : integer:=8);
-port (      --Cin : in std_logic;
-	    --SW : in signed(15 downto 0);
-	    --KEY : in std_logic_vector(1 downto 0);
-	    --LEDG : out std_logic_vector(8 downto 8);
-	    --LEDR : out signed(N-1 downto 0));
-	     --Cout :OUT std_logic;
-            k   	: in std_logic_vector(1 downto 0);
-   	    X, Y	:IN signed(N-1 downto 0);
-            S		:BUFFER signed(N-1 downto 0);
-	    Overflow 	:OUT std_logic
+port (   
+          k   			: in std_logic_vector(1 downto 0);
+   	    X, Y			:IN signed(N-1 downto 0);
+          S				:BUFFER signed(N-1 downto 0);
+	       Overflow 	:OUT std_logic;
+		    segmenti1, segmenti2, segmenti3, segmenti4, segmenti5, segmenti6  :OUT std_logic_vector(6 downto 0)
 	);
 	end adder8;
 
@@ -25,30 +21,28 @@ signal sw_a, sw_b 	: signed(N-1 downto 0);
 signal clk, rst, oflow   : std_logic;
 signal A, B 	  	: signed(N-1 downto 0); 
 signal sig, SUM     	: signed(N-1 downto 0);
---segnali per i segmenti
-signal segmenti1, segmenti2, segmenti3, segmenti4, segmenti5, segmenti6  : std_vector_logic(6 downto 0);
 
 component reg_n 
-port (			R 	      		: in signed(N-1 downto 0);
-			Clock, Resetn 	        : in std_logic;
+port (	R 	      		: in signed(N-1 downto 0);
+			Clock, Resetn 	: in std_logic;
 			Q 	      		: out signed(N-1 downto 0));
 end component;
 
 component fulladd 
 port (	Cin , a, b 	: in std_logic;
-        sum, Cout 	: out std_logic );
+         sum, Cout 	: out std_logic );
 end component;
 
 component flipflop 
-port (	                D, Clock, Resetn 	: in std_logic;
-			Q 		        : out std_logic );
+port (	D, Clock, Resetn 	: in std_logic;
+			Q 		        		: out std_logic );
 end component;
 
 component decoder_bin_exa
 port 
 		(
-			Clock : IN std_logic;
-			Q   : IN std_logic_vector (3 downto 0);
+			Clock    : IN std_logic;
+			Q        : IN signed(3 downto 0);
 			Segmenti : OUT std_logic_vector (6 downto 0)
 		);
 	end component;
@@ -97,7 +91,7 @@ Dec_Primo_sum_display: decoder_bin_exa port map (clock=>clk, Q => S(3 downto 0),
 Dec_secondo_sum_display: decoder_bin_exa port map (clock=>clk, Q => S(7 downto 4), Segmenti => segmenti2);
 
 --uso il terzo decoder per settare i segmenti da agganciare a HEX6
-Dec_primo_x_display: decoder_bin_exa port map (clock=>clk, Q => x(3 downto 3), Segmenti => segmenti3);
+Dec_primo_x_display: decoder_bin_exa port map (clock=>clk, Q => x(3 downto 0), Segmenti => segmenti3);
 
 --uso il quarto decoder per settare i segmenti da agganciare a HEX7
 Dec_secondo_x_display: decoder_bin_exa port map (clock=>clk, Q => x(7 downto 4), Segmenti => segmenti4);
